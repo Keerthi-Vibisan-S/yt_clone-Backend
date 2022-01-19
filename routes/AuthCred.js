@@ -4,6 +4,32 @@ const con = require('../settings/dataBaseConnection');
 
 const route = express.Router();
 
+route.get('/details/:email', (req, res) => {
+    const email = req.params.email;
+    console.log(email+" --- Request Get");
+    var q = `select * from users where email="${email}"`;
+
+    try
+    {
+        con.query(q,(err, result) => {
+            if(err)
+            {
+                console.log("Something went Wrong --- "+err);
+            }
+
+            else
+            {
+                res.send(result);
+                res.end();
+            }
+        })
+    }
+    catch(err)
+    {
+        console.log("An ERROR --- "+err);
+    }
+})
+
 route.post('/', (req, res) => {
     let email = req.body.email;
     console.log(email+"---");

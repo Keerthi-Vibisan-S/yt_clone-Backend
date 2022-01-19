@@ -90,6 +90,31 @@ route.post("/register", (req, res) => {
     }
 });
 
+//This after creating channel to change user type
+route.get("/changeUser/:sno", (req, res) => {
+    const Sno = parseInt(req.params.sno);
+    let q = `update users set usertype="Creator" where Sno=${Sno}`;
+
+    try
+    {
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                console.log(err);
+            }
+
+            else{
+                console.log(result);
+                res.send("updated");
+            }
+        })
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+});
+
 
 //Exporting the routes {get,post}
 module.exports = route;

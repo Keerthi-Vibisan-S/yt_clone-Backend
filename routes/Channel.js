@@ -33,4 +33,30 @@ route.post("/create", (req, res) => {
 });
 
 
+//For GETting channel Details
+route.get("/details/:Sno", (req, res) => {
+    const Sno = req.params.Sno;
+    let q = `select * from channels where Sno = ${Sno}`;
+
+    try
+    {
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                console.log(err);
+            }
+
+            else
+            {
+                res.send(result);
+            }
+        })
+    }
+    catch(err)
+    {
+        console.log("Error while GETTING CHANNEL --- ");
+    }
+})
+
+
 module.exports = route;

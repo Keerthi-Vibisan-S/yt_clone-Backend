@@ -3,6 +3,36 @@ const con = require('../settings/dataBaseConnection');
 
 const route = express.Router();
 
+//Getting all Videos uploaded by the Particular user
+route.get('/getVideos/:Sno', (req, res) => {
+    
+    const Sno = parseInt(req.params.Sno);
+    console.log(Sno);
+    let q = `select * from uploads where Sno=${Sno};`;
+
+    try
+    {
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                console.log("Error on query --- "+err);
+            }
+
+            else
+            {
+                res.json(result);
+            }
+        })
+    }
+
+    catch(err)
+    {
+        console.log("Err while fetching the Videos --- "+err);
+    }
+
+})
+
+
 //For uploading videos into channel
 route.post('/upload', (req, res) => {
     if(req.files == null)

@@ -7,8 +7,7 @@ const route = express.Router();
 route.post('/upload', (req, res) => {
     if(req.files == null)
     {
-        res.status(400);
-        res.send("No files Found");
+        return res.status(400).json({ msg: 'No file uploaded' });
     } 
 
     else
@@ -21,25 +20,25 @@ route.post('/upload', (req, res) => {
        file.mv(path, (err) => {
             if(err)
             {
-                res.send("File already Present");
-            }   
-
-            else{
-                res.send(path);
-            }
+                console.error(err);
+                return res.status(500).send(err);
+            }  
+            res.send(path);
        });
        }
      }
 )
 
 route.post(("/updateDb"), (req,res) => {
-    let Cno = parseInt(req.body.Cno);
-    let Sno = parseInt(req.body.Sno);
-    let vname = req.body.vname;
-    let desc = req.body.desc;
-    let type = req.body.vtype;
-    let date = req.body.date;
-    let path = req.body.vpath;
+
+    console.log(req.body);
+    let Cno = parseInt(req.body.data.Cno);
+    let Sno = parseInt(req.body.data.Sno);
+    let vname = req.body.data.vname;
+    let desc = req.body.data.desc;
+    let type = req.body.data.vtype;
+    let date = req.body.data.date;
+    let path = req.body.path;
 
     let q = `insert into uploads values(null, "${vname}", ${Sno}, ${Cno}, "${desc}", "${type}", "${path}", '0', '0', "${date}")`;
 

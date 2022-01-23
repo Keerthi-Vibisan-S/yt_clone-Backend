@@ -3,6 +3,55 @@ const con = require('../settings/dataBaseConnection');
 
 const route = express.Router();
 
+//Getting all videos all user
+route.get("/getAll", (req, res) => {
+    let q = "select * from channels, uploads where channels.Cno = uploads.Cno";
+
+    try
+    {
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                console.log("Error occurred --- "+err);
+            }
+
+            else{
+                res.json(result);
+                res.end();
+            }
+        })
+    }
+    catch(err)
+    {
+        console.log("Error while fetching all videos "+err);
+    }
+})
+
+//Getting details of particular video
+route.get("/video/:Vid", (req, res) => {
+    const Vid = req.params.Vid;
+    let q = `select * from uploads where Vid = ${Vid}`;
+
+    try
+    {
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                console.log(err);
+            }
+            else
+            {
+                res.json(result);
+                res.end();
+            }
+        })
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+})
+
 //Getting all Videos uploaded by the Particular user
 route.get('/getVideos/:Sno', (req, res) => {
     

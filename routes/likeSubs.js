@@ -3,6 +3,12 @@ const con = require('../settings/dataBaseConnection');
 
 const route = express.Router();
 
+//Getting all subscriptions of a single user
+// route.get("/getSubscriptions/:Sno", (req, res) => {
+//     const Sno = req.params.Sno;
+//     let q = `select * from subscriptions where Sno=${Sno}`;
+// })
+
 //add Subscribe
 route.post("/addSub", (req, res) => {
     const Sno = req.body.Sno;

@@ -101,4 +101,117 @@ route.get("/unsub/:Sno/:Cno", (req, res) => {
     }
 })
 
+//Getting Existing Like
+route.get("/getLike/:Sno/:Vid", (req, res) => {
+    const Sno = req.params.Sno;
+    const Vid = req.params.Vid;
+    let q = `select * from likes where Sno=${Sno} and Vid = ${Vid}`;
+    try
+    {   
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                console.log(err);
+            }
+
+            else
+            {
+                if(result.length == 0)
+                {
+                    res.send("nothing");
+                    res.end();
+                }
+
+                else
+                {
+                    res.send("yes");
+                    res.end();
+                }
+            }
+        })
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+})
+
+//Adding Like
+route.get("/setLike/:Sno/:Vid", (req, res) => {
+    const Sno = req.params.Sno;
+    const Vid = req.params.Vid;
+    let q = `insert into likes values(null,${Sno},${Vid})`;
+    try
+    {   
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                console.log(err);
+            }
+
+            else
+            {
+                    res.send("inserted");
+                    res.end();
+            }
+        })
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+})
+
+//removing Like
+route.get("/remove/:Sno/:Vid", (req, res) => {
+    const Sno = req.params.Sno;
+    const Vid = req.params.Vid;
+    let q = `delete from likes where Sno=${Sno} and Vid=${Vid}`;
+    try
+    {
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                console.log(err);
+            }
+
+            else
+            {
+                res.send("deleted");
+                res.end();
+            }
+        });
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+})
+
+//Getting number of likes for a video
+route.get("/numLike/:Vid", (req, res) => {
+    const Vid = req.params.Vid;
+    let q  = `select count(*) as likesnum from likes where Vid = ${Vid}`;
+
+    try
+    {   
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                console.log(err);
+            }
+            else
+            {
+                console.log(result);
+                res.json(result);
+                res.end();
+            }
+        })
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+})
+
 module.exports = route;

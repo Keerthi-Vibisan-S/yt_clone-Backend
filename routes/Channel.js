@@ -9,8 +9,9 @@ route.post("/create", (req, res) => {
     const cname = req.body.cname;
     const about = req.body.about;
     const date = req.body.date;
+    const cimg = req.body.cimg;
 
-    let q = `insert into channels values(null, ${Sno}, "${cname}", "${about}", "${date}")`;
+    let q = `insert into channels values(null, ${Sno}, "${cname}", "${about}", "${date}", "${cimg}")`;
 
     try
     {

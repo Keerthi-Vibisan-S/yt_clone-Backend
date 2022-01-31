@@ -4,10 +4,31 @@ const con = require('../settings/dataBaseConnection');
 const route = express.Router();
 
 //Getting all subscriptions of a single user
-// route.get("/getSubscriptions/:Sno", (req, res) => {
-//     const Sno = req.params.Sno;
-//     let q = `select * from subscriptions where Sno=${Sno}`;
-// })
+route.get("/getSubscriptions/:Sno", (req, res) => {
+    const Sno = req.params.Sno;
+    let q = `select * from subscriptions, channels where subscriptions.Sno=${Sno} and channels.Cno = subscriptions.Cno`;
+
+    try
+    {
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                console.log(err);
+            }
+
+            else
+            {
+                console.log(result);
+                res.json(result);
+                res.end();
+            }
+        })
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+})
 
 //add Subscribe
 route.post("/addSub", (req, res) => {
@@ -214,4 +235,27 @@ route.get("/numLike/:Vid", (req, res) => {
     }
 })
 
+//Getting all Likes
+route.get("/getMyLikes/:Sno", (req, res) => {
+    const Sno = req.params.Sno;
+    let q = `select * from likes, uploads, channels where likes.Sno = ${Sno} and likes.Vid = uploads.Vid and  uploads.Cno = channels.Cno;`;
+    try
+    {
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                console.log(err);
+            }
+            else
+            {
+                res.json(result);
+                res.end();
+            }
+        })
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+})
 module.exports = route;

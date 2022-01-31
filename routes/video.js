@@ -30,7 +30,7 @@ route.get("/getAll", (req, res) => {
 //Getting details of particular video
 route.get("/video/:Vid", (req, res) => {
     const Vid = req.params.Vid;
-    let q = `select * from uploads where Vid = ${Vid}`;
+    let q = `select * from uploads, channels where Vid = ${Vid} and uploads.Cno = uploads.Cno`;
 
     try
     {

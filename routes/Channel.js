@@ -57,7 +57,36 @@ route.get("/details/:Sno", (req, res) => {
     {
         console.log("Error while GETTING CHANNEL --- ");
     }
-})
+});
+
+//Getting all videos uploaded to a channel
+route.get("/getAllVideos/:Cno", (req, res) => {
+    const Cno = req.params.Cno;
+    let q = `select * from uploads, channels where uploads.Cno = ${Cno} and uploads.Cno = channels.Cno`;
+
+    try
+    {
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                res.status(500);
+                console.log(err);
+            }
+
+            else
+            {
+                res.status(200);
+                res.json(result);
+                res.end();
+            }
+        })
+    }
+    catch(err)
+    {
+        console.log("Error ---- "+err);
+    }
+
+});
 
 
 module.exports = route;

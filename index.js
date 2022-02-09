@@ -29,6 +29,9 @@ app.use("/media", LikeSubs);
 var views = require('./routes/views');
 app.use("/views", views);
 
+var comments = require('./routes/comments');
+app.use("/comments", comments);
+
 //Server Listen
 app.listen(2022, () => {
     console.log("Server Started -- Port:2022");

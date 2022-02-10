@@ -32,6 +32,9 @@ app.use("/views", views);
 var comments = require('./routes/comments');
 app.use("/comments", comments);
 
+var subComments = require('./routes/subComments');
+app.use("/subComment", subComments);
+
 //Server Listen
 app.listen(2022, () => {
     console.log("Server Started -- Port:2022");

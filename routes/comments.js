@@ -8,6 +8,7 @@ route.post("/add", (req, res) => {
     const Vid = req.body.Vid;
     const comment = req.body.comment;
     const date = req.body.date;
+    console.log(comment);
     let q = `insert into comments values(null, ${Sno}, ${Vid}, "${comment}", "${date}", "0")`;
     try
     {

@@ -190,6 +190,32 @@ route.get("/delLike/:Cid/:Sno", (req, res) => {
     {
         console.log(err);
     }
+});
+
+//Getting total number of Likes for a subComment
+route.get("/getNumber/:Cid", (req, res) => {
+    const Cid = req.params.Cid;
+    let q = `select count(*) as numLikes from clikes where Cid = ${Cid}`;
+
+    try
+    {
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                res.status(500);
+                res.end();
+                console.log(err);
+            }
+            else{
+                res.json(result);
+                res.end();
+            }
+        })
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
 })
 
 module.exports = route;

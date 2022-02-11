@@ -5,7 +5,8 @@ var con = mysql.createConnection({
     host: "localhost",
     user: 'root',
     password: 'vibi1234',
-    database: 'ytclone'
+    database: 'ytclone',
+    charset : 'utf8mb4'
 });
 
 //Holding Connection

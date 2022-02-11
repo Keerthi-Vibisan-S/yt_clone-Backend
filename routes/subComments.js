@@ -62,6 +62,134 @@ route.get("/getSubcomment/:MCid", (req, res) => {
     {
         console.log(err);
     }
+});
+
+//Counting number of Sub-comments for main-comment for the support function
+route.get("/check/:MCid", (req, res) => {
+    const MCid = req.params.MCid;
+    let q = `select count(*) as NSubComment from subcomments where Cid = ${MCid}`;
+
+    try
+    {
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                res.status(500);
+                res.end();
+                console.log(err);
+            }
+            else
+            {
+                res.send(result);
+                res.end();
+            }
+        })
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+})
+
+//Adding Sub Comments Likes
+route.post("/addLike", (req, res) => {
+    const Cid = req.body.Cid;
+    const Sno = req.body.Sno;
+    let q = `insert into clikes values(null, ${Cid}, ${Sno})`;
+
+    try
+    {
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                res.status(500);
+                res.end();
+                console.log(err);
+            }
+
+            else
+            {
+                res.send("inserted");
+                res.end();
+            }
+        })
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+});
+
+//Select weather a user liked or not
+route.get("/checkLike/:Cid/:Sno", (req, res) => {
+    const Sno = req.params.Sno;
+    const Cid = req.params.Cid;
+    let q = `select * from clikes where Sno=${Sno} and Cid=${Cid}`;
+
+    try
+    {
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                res.status(500);
+                res.end();
+                console.log(err);
+            }
+            else
+            {
+                if(result.length != 0)
+                {
+                    res.send("yes");
+                    res.end();
+                }
+                else
+                {
+                    res.send("no");
+                    res.end();
+                }
+            }
+        })
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+})
+
+//Unlike
+route.get("/delLike/:Cid/:Sno", (req, res) => {
+    const Sno = req.params.Sno;
+    const Cid = req.params.Cid;
+    let q = `delete from clikes where Sno=${Sno} and Cid=${Cid}`;
+
+    try
+    {
+        con.query(q, (err, result) => {
+            if(err)
+            {
+                res.status(500);
+                res.end();
+                console.log(err);
+            }
+            else
+            {
+                if(result.length != 0)
+                {
+                    res.send("yes");
+                    res.end();
+                }
+                else
+                {
+                    res.send("no");
+                    res.end();
+                }
+            }
+        })
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
 })
 
 module.exports = route;

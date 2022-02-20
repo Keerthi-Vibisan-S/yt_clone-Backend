@@ -62,7 +62,7 @@ route.get("/details/:Sno", (req, res) => {
 //Getting all videos uploaded to a channel
 route.get("/getAllVideos/:Cno", (req, res) => {
     const Cno = req.params.Cno;
-    let q = `select * from uploads, channels where uploads.Cno = ${Cno} and uploads.Cno = channels.Cno`;
+    let q = `select * from uploads, channels where uploads.Cno = ${Cno} and uploads.Cno = channels.Cno order by upload_date desc`;
 
     try
     {

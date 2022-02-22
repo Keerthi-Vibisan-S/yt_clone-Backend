@@ -3,7 +3,7 @@ const con = require('../settings/dataBaseConnection');
 
 const route = express.Router();
 
-route.post("/add", (req, res) => {
+route.post("/add",verifyToken, (req, res) => {
     const Sno = req.body.Sno;
     const Vid = req.body.Vid;
     const comment = req.body.comment;
@@ -58,4 +58,38 @@ route.get("/get/:Vid", (req, res) => {
         console.log(err);
     }
 })
+
+function verifyToken(req, res, next)
+{
+    const bearerToken = req.headers.authorization;
+    const token = bearerToken && bearerToken.split(' ')[1];
+    const ref_token = req.body.refresh_token;
+    console.log("-----");
+    console.log(ref_token);
+    const newCred = {};
+
+    if(token==null)
+    {
+        res.sendStatus(401);
+    }
+
+    else
+    {
+        jwt.verify(token, process.env.SECRET_KEY, (err, value) => {
+            if(err)
+            {
+               console.log(err);
+               res.sendStatus(403);
+            }
+
+            else
+            {
+                console.log("----- JWT Authentication -----");
+                console.log(value);
+                next();
+            }
+        })
+    }
+}
+
 module.exports = route;

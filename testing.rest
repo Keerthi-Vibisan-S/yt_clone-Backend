@@ -1,0 +1,2 @@
+GET http://localhost:2022/media/getSubscriptions/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtlZXJ0aGl2aWJpc2FuLmN0MjBAYml0c2F0aHkuYWMuaW4iLCJpYXQiOjE2NDU0NjAwODJ9.bc_-Qbcd2iUeH2XCKY8HemL8x93pZpsWAqomRPWjca4

@@ -43,6 +43,10 @@ app.post("/getToken", (req, res) => {
         {
             CheckPresent(res, user);
         }
+        else
+        {
+            res.end();
+        }
       })
       .catch(console.error);
 })
@@ -81,9 +85,14 @@ function CheckPresent(res, user)
 function GenerateToken(res, user)
 {
     const token = jwt.sign({email: user.email}, process.env.SECRET_KEY);
-    //console.log("Generated Token --- "+token);
     res.json(token);
     res.end();
+}
+
+//! Refresh Token
+function getRefreshToken(user)
+{
+    return(jwt.sign({email: user.email}, process.env.REFRESH_KEY));
 }
 
 //! Register in Database

@@ -4,7 +4,7 @@ const con = require('../settings/dataBaseConnection');
 const route = express.Router();
 
 //Inserting sub comment
-route.post("/addSubComment", (req, res) => {
+route.post("/addSubComment",verifyToken, (req, res) => {
     const CommentId = req.body.MCid; //Main Comment Id
     const Sno = req.body.Sno;
     const Vid = req.body.Vid;
@@ -92,7 +92,7 @@ route.get("/check/:MCid", (req, res) => {
 })
 
 //Adding Sub Comments Likes
-route.post("/addLike", (req, res) => {
+route.post("/addLike",verifyToken, (req, res) => {
     const Cid = req.body.Cid;
     const Sno = req.body.Sno;
     let q = `insert into clikes values(null, ${Cid}, ${Sno})`;
@@ -121,7 +121,7 @@ route.post("/addLike", (req, res) => {
 });
 
 //Select weather a user liked or not
-route.get("/checkLike/:Cid/:Sno", (req, res) => {
+route.get("/checkLike/:Cid/:Sno",verifyToken, (req, res) => {
     const Sno = req.params.Sno;
     const Cid = req.params.Cid;
     let q = `select * from clikes where Sno=${Sno} and Cid=${Cid}`;
@@ -157,7 +157,7 @@ route.get("/checkLike/:Cid/:Sno", (req, res) => {
 })
 
 //Unlike
-route.get("/delLike/:Cid/:Sno", (req, res) => {
+route.get("/delLike/:Cid/:Sno",verifyToken, (req, res) => {
     const Sno = req.params.Sno;
     const Cid = req.params.Cid;
     let q = `delete from clikes where Sno=${Sno} and Cid=${Cid}`;
@@ -217,5 +217,39 @@ route.get("/getNumber/:Cid", (req, res) => {
         console.log(err);
     }
 })
+
+function verifyToken(req, res, next)
+{
+    const bearerToken = req.headers.authorization;
+    const token = bearerToken && bearerToken.split(' ')[1];
+    const ref_token = req.body.refresh_token;
+    console.log("-----");
+    console.log(ref_token);
+    const newCred = {};
+
+    if(token==null)
+    {
+        res.sendStatus(401);
+    }
+
+    else
+    {
+        jwt.verify(token, process.env.SECRET_KEY, (err, value) => {
+            if(err)
+            {
+               console.log(err);
+               res.sendStatus(403);
+            }
+
+            else
+            {
+                console.log("----- JWT Authentication -----");
+                console.log(value);
+                next();
+            }
+        })
+    }
+}
+
 
 module.exports = route;

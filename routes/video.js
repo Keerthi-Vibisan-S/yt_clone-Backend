@@ -83,7 +83,7 @@ route.get('/getVideos/:Sno', (req, res) => {
 
 
 //For uploading videos into channel
-route.post('/upload', (req, res) => {
+route.post('/upload',verifyToken, (req, res) => {
     if(req.files == null)
     {
         return res.status(400).json({ msg: 'No file uploaded' });
@@ -108,7 +108,7 @@ route.post('/upload', (req, res) => {
      }
 )
 
-route.post(("/updateDb"), (req,res) => {
+route.post(("/updateDb"),verifyToken, (req,res) => {
 
     console.log(req.body);
     let Cno = parseInt(req.body.data.Cno);
@@ -143,5 +143,39 @@ route.post(("/updateDb"), (req,res) => {
 
     
 })
+
+
+function verifyToken(req, res, next)
+{
+    const bearerToken = req.headers.authorization;
+    const token = bearerToken && bearerToken.split(' ')[1];
+    console.log("-----");
+    console.log(ref_token);
+    const newCred = {};
+
+    if(token==null)
+    {
+        res.sendStatus(401);
+    }
+
+    else
+    {
+        jwt.verify(token, process.env.SECRET_KEY, (err, value) => {
+            if(err)
+            {
+               console.log(err);
+               res.sendStatus(403);
+            }
+
+            else
+            {
+                console.log("----- JWT Authentication -----");
+                console.log(value);
+                next();
+            }
+        })
+    }
+}
+
 
 module.exports = route;

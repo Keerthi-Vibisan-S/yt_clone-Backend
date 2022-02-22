@@ -1,10 +1,12 @@
+require('dotenv').config();
 const express = require('express');
 const con = require('../settings/dataBaseConnection');
+const jwt = require('jsonwebtoken');
 
 const route = express.Router();
 
 //Getting all subscriptions of a single user
-route.get("/getSubscriptions/:Sno", (req, res) => {
+route.get("/getSubscriptions/:Sno",verifyToken, (req, res) => {
     const Sno = req.params.Sno;
     let q = `select * from subscriptions, channels where subscriptions.Sno=${Sno} and channels.Cno = subscriptions.Cno`;
 
@@ -18,7 +20,6 @@ route.get("/getSubscriptions/:Sno", (req, res) => {
 
             else
             {
-                console.log(result);
                 res.json(result);
                 res.end();
             }
@@ -30,8 +31,9 @@ route.get("/getSubscriptions/:Sno", (req, res) => {
     }
 })
 
+
 //add Subscribe
-route.post("/addSub", (req, res) => {
+route.post("/addSub",verifyToken , (req, res) => {
     const Sno = req.body.Sno;
     const Cno = req.body.Cno;
     let q = `insert into subscriptions values(null, ${Sno}, ${Cno})`;
@@ -94,7 +96,7 @@ route.get("/getSub/:Sno/:Cno", (req, res) => {
 });
 
 //Deleting sub
-route.get("/unsub/:Sno/:Cno", (req, res) => {
+route.get("/unsub/:Sno/:Cno",verifyToken, (req, res) => {
     const Sno = req.params.Sno;
     const Cno = req.params.Cno;
 
@@ -158,7 +160,7 @@ route.get("/getLike/:Sno/:Vid", (req, res) => {
 })
 
 //Adding Like
-route.get("/setLike/:Sno/:Vid", (req, res) => {
+route.get("/setLike/:Sno/:Vid",verifyToken, (req, res) => {
     const Sno = req.params.Sno;
     const Vid = req.params.Vid;
     let q = `insert into likes values(null,${Sno},${Vid})`;
@@ -184,7 +186,7 @@ route.get("/setLike/:Sno/:Vid", (req, res) => {
 })
 
 //removing Like
-route.get("/remove/:Sno/:Vid", (req, res) => {
+route.get("/remove/:Sno/:Vid",verifyToken, (req, res) => {
     const Sno = req.params.Sno;
     const Vid = req.params.Vid;
     let q = `delete from likes where Sno=${Sno} and Vid=${Vid}`;
@@ -236,7 +238,7 @@ route.get("/numLike/:Vid", (req, res) => {
 })
 
 //Getting all Likes
-route.get("/getMyLikes/:Sno", (req, res) => {
+route.get("/getMyLikes/:Sno",verifyToken , (req, res) => {
     const Sno = req.params.Sno;
     let q = `select * from likes, uploads, channels where likes.Sno = ${Sno} and likes.Vid = uploads.Vid and  uploads.Cno = channels.Cno;`;
     try
@@ -258,4 +260,38 @@ route.get("/getMyLikes/:Sno", (req, res) => {
         console.log(err);
     }
 })
+
+function verifyToken(req, res, next)
+{
+    const bearerToken = req.headers.authorization;
+    const token = bearerToken && bearerToken.split(' ')[1];
+    const ref_token = req.body.refresh_token;
+    console.log("-----");
+    console.log(ref_token);
+    const newCred = {};
+
+    if(token==null)
+    {
+        res.sendStatus(401);
+    }
+
+    else
+    {
+        jwt.verify(token, process.env.SECRET_KEY, (err, value) => {
+            if(err)
+            {
+               console.log(err);
+               res.sendStatus(403);
+            }
+
+            else
+            {
+                console.log("----- JWT Authentication -----");
+                console.log(value);
+                next();
+            }
+        })
+    }
+}
+
 module.exports = route;

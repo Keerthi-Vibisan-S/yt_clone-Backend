@@ -4,7 +4,7 @@ const con = require('../settings/dataBaseConnection');
 const route = express.Router();
 
 //For Creating a new Channel
-route.post("/create", (req, res) => {
+route.post("/create",verifyToken, (req, res) => {
     const Sno = parseInt(req.body.Sno);
     const cname = req.body.cname;
     const about = req.body.about;
@@ -88,5 +88,37 @@ route.get("/getAllVideos/:Cno", (req, res) => {
 
 });
 
+function verifyToken(req, res, next)
+{
+    const bearerToken = req.headers.authorization;
+    const token = bearerToken && bearerToken.split(' ')[1];
+    const ref_token = req.body.refresh_token;
+    console.log("-----");
+    console.log(ref_token);
+    const newCred = {};
+
+    if(token==null)
+    {
+        res.sendStatus(401);
+    }
+
+    else
+    {
+        jwt.verify(token, process.env.SECRET_KEY, (err, value) => {
+            if(err)
+            {
+               console.log(err);
+               res.sendStatus(403);
+            }
+
+            else
+            {
+                console.log("----- JWT Authentication -----");
+                console.log(value);
+                next();
+            }
+        })
+    }
+}
 
 module.exports = route;

@@ -37,7 +37,7 @@ function verifyToken(req, res, next)
     const bearerToken = req.headers.authorization;
     const token = bearerToken && bearerToken.split(' ')[1];
     console.log("-----");
-    console.log(ref_token);
+    // console.log(ref_token);
     const newCred = {};
 
     if(token==null)

@@ -39,6 +39,10 @@ app.use("/subComment", subComments);
 var search = require('./routes/search');
 app.use("/search", search);
 
+//Todo:  Deleting comments
+var editComments = require('./routes/commentsEdit');
+app.use("/editComments", editComments);
+
 //Server Listen
 app.listen(2022, () => {
     console.log("Server Started -- Port:2022");

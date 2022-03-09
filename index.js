@@ -35,6 +35,10 @@ app.use("/comments", comments);
 var subComments = require('./routes/subComments');
 app.use("/subComment", subComments);
 
+//! Search bar
+var search = require('./routes/search');
+app.use("/search", search);
+
 //Server Listen
 app.listen(2022, () => {
     console.log("Server Started -- Port:2022");

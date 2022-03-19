@@ -43,6 +43,9 @@ app.use("/search", search);
 var editComments = require('./routes/commentsEdit');
 app.use("/editComments", editComments);
 
+//Static Serve
+app.use("/ytsupport", express.static("routes"));
+
 //Server Listen
 app.listen(2022, () => {
     console.log("Server Started -- Port:2022");

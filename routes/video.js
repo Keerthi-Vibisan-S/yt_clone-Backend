@@ -97,7 +97,7 @@ route.post('/upload',verifyToken, (req, res) => {
        console.log(file);
        let fileName = file.name;
 
-       const path = `D:/React/yt_clone/public/uploads/${fileName}`; 
+       const path = `${__dirname}/${fileName}`; 
        file.mv(path, (err) => {
             if(err)
             {

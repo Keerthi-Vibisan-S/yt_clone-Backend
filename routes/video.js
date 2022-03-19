@@ -120,8 +120,9 @@ route.post(("/updateDb"),verifyToken, (req,res) => {
     let type = req.body.data.vtype;
     let date = req.body.data.date;
     let path = req.body.path;
+    let vimg = req.body.data.vimg;
 
-    let q = `insert into uploads values(null, "${vname}", ${Sno}, ${Cno}, "${desc}", "${type}", "${path}", '0', '0', "${date}")`;
+    let q = `insert into uploads values(null, "${vname}", ${Sno}, ${Cno}, "${desc}", "${type}", "${path}", '0', '0', "${date}", "${vimg}")`;
 
     try
     {
